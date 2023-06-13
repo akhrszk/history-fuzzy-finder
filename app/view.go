@@ -1,6 +1,9 @@
 package app
 
-import "github.com/rivo/tview"
+import (
+	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
+)
 
 type View struct {
 	*tview.Flex
@@ -8,9 +11,32 @@ type View struct {
 	history *HistoryView
 }
 
-func NewView(lines []string) *View {
+func NewView(lines []string, cmd chan string) *View {
 	input := NewQueryInput()
 	history := NewHistoryView(lines)
+
+	input.SetChangedFunc(func(query string) {
+		history.Filter(query)
+	})
+	input.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		case tcell.KeyDown:
+			history.CursorDown()
+			return nil
+		case tcell.KeyUp:
+			history.CursorUp()
+			return nil
+		case tcell.KeyEnter:
+			s := history.Selected()
+			if s == nil {
+				return nil
+			}
+			cmd <- *s
+			return nil
+		default:
+			return event
+		}
+	})
 
 	layout := tview.NewFlex().
 		SetDirection(tview.FlexRow).

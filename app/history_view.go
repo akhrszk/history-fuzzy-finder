@@ -74,9 +74,9 @@ func (h *HistoryView) Sync() {
 	w.Clear()
 	for i, line := range h.lines {
 		if i == int(h.cursor) {
-			fmt.Fprintln(w, "[yellow]"+line+"[white]")
+			fmt.Fprintln(w, "[yellow]"+line)
 		} else {
-			fmt.Fprintln(w, line)
+			fmt.Fprintln(w, "[white]"+line)
 		}
 	}
 	w.Close()
