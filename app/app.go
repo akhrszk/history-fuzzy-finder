@@ -18,6 +18,7 @@ func NewApp(lines []string) *App {
 		cmd,
 	}
 
+	// ECSキーで抜ける
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyESC:

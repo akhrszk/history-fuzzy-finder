@@ -1,4 +1,4 @@
-module uiapp
+module hff
 
 go 1.20
 
